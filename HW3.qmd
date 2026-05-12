@@ -83,6 +83,49 @@ We used `sample()` to randomly pick 365 PM2.5 values from a range of 2 to 50 µg
 
 ```{r}
 
+current_streak <- 0
+max_unhealthy_streak <- 0
+
+for (i in 1:nrow(air_quality)) {
+  
+  # grab today's pm25
+  today_pm25 <- air_quality$pm25[i]
+  
+  # classify risk
+  if (today_pm25 < 12) {
+    air_quality$risk[i] <- "good"
+    
+  } else if (today_pm25 <= 35.4) {
+    air_quality$risk[i] <- "moderate"
+    
+  } else {
+    air_quality$risk[i] <- "unhealthy"
+  }
+  
+  # check the streak - was yesterday also unhealthy?
+  if (air_quality$risk[i] == "unhealthy") {
+    
+    if (i > 1 && air_quality$risk[i-1] == "unhealthy") {
+      current_streak <- current_streak + 1  # keep the streak going
+    } else {
+      current_streak <- 1  # start a fresh streak
+    }
+    
+  } else {
+    current_streak <- 0  # not unhealthy so reset
+  }
+  
+  # update max if current streak is the longest so far
+  if (current_streak > max_unhealthy_streak) {
+    max_unhealthy_streak <- current_streak
+  }
+  
+}
+
+# check results
+table(air_quality$risk)
+cat("Longest unhealthy streak:", max_unhealthy_streak, "days")
+
 ```
 
 ## **Part 3: Seasonal Summary with a For Loop**
@@ -90,6 +133,26 @@ We used `sample()` to randomly pick 365 PM2.5 values from a range of 2 to 50 µg
 ### **Count Unhealthy Days by Season**
 
 ```{r}
+
+# create a vector to store our counts, one slot per season
+unhealthy_counts = c(winter = 0, spring = 0, summer = 0, fall = 0)
+
+# loop through every day
+for (i in 1:nrow(air_quality)) {
+  
+  # grab today's season and risk
+  today_season = air_quality$season[i]
+  today_risk = air_quality$risk[i]
+  
+  # if today is unhealthy, add 1 to that season's count
+  if (today_risk == "unhealthy") {
+    unhealthy_counts[today_season] = unhealthy_counts[today_season] + 1
+  }
+  
+}
+
+# check results
+unhealthy_counts
 
 ```
 

@@ -1,0 +1,185 @@
+---
+title: "Assignment 3: Air Quality Risk Assessment"
+author: "Grace Bryan & Elena Nirgiotis"
+date: "May 13, 2026"
+format: pdf
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## **Overview**
+
+text
+
+## **Load Packages**
+
+```{r}
+library(tidyverse)
+```
+
+## **Part 1: Build the Dataset**
+
+### **Why We Chose This Distribution**
+
+text
+
+### **Create the Dataset**
+
+```{r}
+set.seed(262)
+
+# create daily air quality dataset
+air_quality <- data.frame(
+  day = 1:365,
+  pm2.5= rnorm(365, mean = 22, sd = 10)
+)
+
+# prevent negative PM2.5 values
+air_quality$pm2.5 <- pmax(air_quality$pm2.5, 0)
+
+# assign seasons based on day number
+air_quality$season <- NA
+
+air_quality$season[1:90] <- "winter"
+air_quality$season[91:180] <- "spring"
+air_quality$season[181:270] <- "summer"
+air_quality$season[271:365] <- "fall"
+
+# convert to factor
+air_quality$season <- factor(
+  air_quality$season,
+  levels = c("winter", "spring", "summer", "fall")
+)
+
+# initialize empty risk column
+air_quality$risk <- NA
+
+```
+
+## **Part 2: Classify Risk with a For Loop**
+
+### **Risk Classification Rules**
+
+- **good:** PM2.5 below 12 µg/m³
+- **moderate:** PM2.5 between 12 and 35.4 µg/m³
+- **unhealthy:** PM2.5 above 35.4 µg/m³
+
+### **Use a For Loop to Fill Risk Column**
+
+```{r}
+# initialize streak trackers
+current_streak <- 0
+max_unhealthy_streak <- 0
+
+# loop through each day
+for (i in 1:nrow(air_quality)) {
+  
+  # assign risk category
+  if (air_quality$pm2.5[i] < 12) {
+    air_quality$risk[i] <- "good"
+    current_streak <- 0
+    
+  } else if (air_quality$pm2.5[i] <= 35.4) {
+    air_quality$risk[i] <- "moderate"
+    current_streak <- 0
+    
+  } else {
+    air_quality$risk[i] <- "unhealthy"
+    
+    # increase unhealthy streak
+    current_streak <- current_streak + 1
+    
+    # update maximum streak if needed
+    if(current_streak > max_unhealthy_streak) {
+      max_unhealthy_streak <- current_streak
+    }
+  }
+}
+```
+
+## **Part 3: Seasonal Summary with a For Loop**
+
+### **Count Unhealthy Days by Season**
+
+```{r}
+# create named vector to store counts
+unhealthy_counts <- c(
+  winter = 0,
+  spring = 0,
+  summer = 0,
+  fall = 0
+)
+
+# loop through seasons
+for (season_name in levels(air_quality$season)) {
+  
+  # count unhealthy days for each season
+  unhealthy_counts[season_name] <- sum(
+    air_quality$season == season_name &
+      air_quality$risk == "unhealthy"
+  )
+  
+}
+
+# results
+unhealthy_counts
+```
+
+### **Convert Seasonal Summary to Data Frame**
+
+```{r}
+season_summary <- data.frame(
+  season = names(unhealthy_counts),
+  unhealthy_days = as.numeric(unhealthy_counts)
+)
+
+season_summary
+```
+
+## **Part 4: Visualize and Report**
+
+### **Plot 1: PM2.5 Across the Year**
+
+```{r}
+plot_title_1 <- sprintf(
+  "Daily PM2.5 Concentrations Across the Year (Max Unhealthy Streak = %s Days)",
+  max_unhealthy_streak
+)
+
+# time series plot
+ggplot(air_quality, aes(x = day, y = pm2.5, color = season)) +
+  geom_line() +
+  labs(
+    title = plot_title_1,
+    x = "Day of Year",
+    y = expression("PM2.5 (" * mu * "g/m"^3 * ")")
+  ) +
+  theme_minimal()
+```
+
+### **Plot 2: Count of Risk Categories**
+
+```{r}
+plot_title_2 <- sprintf(
+  "Air Quality Risk Category Counts (Max Unhealthy Streak = %s Days)",
+  max_unhealthy_streak
+)
+
+# bar chart of risk categories
+
+ggplot(air_quality, aes(x = risk, fill = risk)) +
+  geom_bar() +
+  labs(
+    title = plot_title_2,
+    x = "Risk Category",
+    y = "Number of Days"
+  ) +
+  theme_minimal()
+```
+
+### **Management Summary**
+
+text

@@ -10,17 +10,10 @@ editor: visual
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-## **Overview**
-
 ## **Load Packages**
 
 ```{r}
-
-
-
-
-
-
+library(ggplot2)
 ```
 
 ## **Part 1: Build the Dataset**
@@ -88,7 +81,7 @@ max_unhealthy_streak <- 0
 
 for (i in 1:nrow(air_quality)) {
   
-  # grab today's pm25
+  # add today's pm25
   today_pm25 <- air_quality$pm25[i]
   
   # classify risk
@@ -140,7 +133,7 @@ unhealthy_counts = c(winter = 0, spring = 0, summer = 0, fall = 0)
 # loop through every day
 for (i in 1:nrow(air_quality)) {
   
-  # grab today's season and risk
+  # use today's season and risk
   today_season = air_quality$season[i]
   today_risk = air_quality$risk[i]
   
@@ -160,6 +153,13 @@ unhealthy_counts
 
 ```{r}
 
+# convert to data frame for plotting
+unhealthy_summary = data.frame(
+  season = names(unhealthy_counts),
+  unhealthy_days = as.numeric(unhealthy_counts))
+
+unhealthy_summary
+
 ```
 
 ## **Part 4: Visualize and Report**
@@ -168,14 +168,37 @@ unhealthy_counts
 
 ```{r}
 
+# make the title first using sprintf, including our max streak
+plot_title = sprintf("Daily PM2.5 Concentrations Across the Year - Longest Unhealthy Streak: %d days", max_unhealthy_streak)
+
+# now plot
+plot_title = sprintf("Daily PM2.5 Concentrations Across the Year - Longest Unhealthy Streak: %d days", max_unhealthy_streak)
+
+ggplot(air_quality, aes(x = day, y = pm25, color = season)) +
+  geom_line() +
+  labs(title = plot_title,
+       x = "Day of Year",
+       y = "PM2.5 (ug/m3)") +
+  theme_minimal()
 ```
 
 ### **Plot 2: Count of Risk Categories**
 
 ```{r}
 
+# make the title using sprintf
+bar_title = sprintf("Count of Days by Risk Category - Longest Unhealthy Streak: %d days", max_unhealthy_streak)
+
+# now plot
+ggplot(air_quality, aes(x = risk, fill = risk)) +
+  geom_bar() +
+  labs(title = bar_title,
+       x = "Risk Category",
+       y = "Number of Days") +
+  theme_minimal()
 ```
 
 ## **Management Summary**
 
-text
+This data is a simulation of 365 days of PM2.5 air quality readings over the course of a year. The majority of days fell into the moderate risk category, with a smaller number of good days (around 75). There were around 110 unhealthy days, and the longest consecutive streak of unhealthy days was 5 days in a row. Out of all the seasons, fall had the most unhealthy days (39), which may be due to wildfires that occur that time of year. From a management perspective, launching a public alert system that automatically notifies residents when unhealthy
+conditions are forecast, particularly heading into fall could be useful in ensuring public health. Additionally, we recommend investigating the specific emission sources contributing to the high number of unhealthy days and considering whether stricter local regulations or emission controls are warranted. Lastly, continued monitoring is essential to track whether conditions improve over time.

@@ -62,17 +62,14 @@ air_quality$risk <- NA
 # check it
 head(air_quality)
 
+summary(air_quality)
+
+
 ```
 
 ### **Why We Chose This Distribution**
 
-text
-
-### **Create the Dataset**
-
-```{r}
-
-```
+We used `sample()` to randomly pick 365 PM2.5 values from a range of 2 to 50 µg/m³. We chose this range because we looked up typical urban PM2.5 levels and according to the EPA, most days in a city fall somewhere between 5 and 25 µg/m³, but it can spike higher during things like wildfires or heavy traffic. We thought a range of 2 to 50 made sense because it covers normal days but also includes some realistically bad ones, so we'd see a mix of all three risk categories in the data.
 
 ## **Part 2: Classify Risk with a For Loop**
 

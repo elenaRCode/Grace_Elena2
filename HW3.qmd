@@ -29,10 +29,10 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 # create a sequence of PM2.5 values to sample from
 possible_pm25 <- seq(from = 2, to = 50, by = 0.1)
 
-# sample 365 days worth of readings (one per day, with replacement)
+# sample 365 days worth of readings 
 pm25_readings <- sample(possible_pm25, size = 365, replace = TRUE)
 
-# make it a data frame - we'll add more columns to it as we go
+# make it a data frame 
 air_quality <- data.frame(day = 1:365,
                           pm25 = pm25_readings)
 
@@ -47,10 +47,9 @@ air_quality$season <- ifelse(air_quality$day <= 90, "winter",
                       ifelse(air_quality$day <= 180, "spring",
                       ifelse(air_quality$day <= 270, "summer", "fall")))
 
-# store it as a factor (the assignment requires this)
+# store it as a factor 
 air_quality$season <- factor(air_quality$season, 
                              levels = c("winter", "spring", "summer", "fall"))
-
 # check it looks right
 head(air_quality)
 tail(air_quality)

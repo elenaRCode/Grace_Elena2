@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,6 +11,9 @@
 
 <title>Assignment 3: Air Quality Risk Assessment</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -63,15 +66,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="HW3_files/libs/clipboard/clipboard.min.js"></script>
 <script src="HW3_files/libs/quarto-html/quarto.js" type="module"></script>
 <script src="HW3_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="HW3_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="HW3_files/libs/quarto-html/popper.min.js"></script>
 <script src="HW3_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="HW3_files/libs/quarto-html/anchor.min.js"></script>
 <link href="HW3_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="HW3_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="HW3_files/libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="HW3_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="HW3_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="HW3_files/libs/bootstrap/bootstrap-a74871fe4945b66d259aafc266475145.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="HW3_files/libs/bootstrap/bootstrap-8ffd5f67044e5306d9846f29df41dda5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -164,17 +166,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(air_quality)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  day pm25
-1   1 29.9
-2   2 47.5
-3   3 18.6
-4   4 38.0
-5   5 41.4
-6   6 17.3</code></pre>
+1   1 23.8
+2   2 25.3
+3   3 24.5
+4   4 20.3
+5   5  4.1
+6   6  5.5</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(air_quality<span class="sc">$</span>pm25)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   2.10   13.70   25.20   25.59   37.00   50.00 </code></pre>
+   2.00   14.00   25.00   25.74   37.80   49.80 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign season based on day number</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># days 1-90 = winter, 91-180 = spring, 181-270 = summer, 271-365 = fall</span></span>
@@ -189,22 +191,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(air_quality)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  day pm25 season
-1   1 29.9 winter
-2   2 47.5 winter
-3   3 18.6 winter
-4   4 38.0 winter
-5   5 41.4 winter
-6   6 17.3 winter</code></pre>
+1   1 23.8 winter
+2   2 25.3 winter
+3   3 24.5 winter
+4   4 20.3 winter
+5   5  4.1 winter
+6   6  5.5 winter</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(air_quality)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    day pm25 season
-360 360 29.7   fall
-361 361 21.1   fall
-362 362  5.1   fall
-363 363 36.1   fall
-364 364 19.4   fall
-365 365 35.2   fall</code></pre>
+360 360  7.5   fall
+361 361 48.9   fall
+362 362 15.6   fall
+363 363 33.7   fall
+364 364 40.8   fall
+365 365 43.0   fall</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(air_quality<span class="sc">$</span>season)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -218,22 +220,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(air_quality)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  day pm25 season risk
-1   1 29.9 winter   NA
-2   2 47.5 winter   NA
-3   3 18.6 winter   NA
-4   4 38.0 winter   NA
-5   5 41.4 winter   NA
-6   6 17.3 winter   NA</code></pre>
+1   1 23.8 winter   NA
+2   2 25.3 winter   NA
+3   3 24.5 winter   NA
+4   4 20.3 winter   NA
+5   5  4.1 winter   NA
+6   6  5.5 winter   NA</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(air_quality)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      day           pm25          season     risk        
- Min.   :  1   Min.   : 2.10   winter:90   Mode:logical  
- 1st Qu.: 92   1st Qu.:13.70   spring:90   NA's:365      
- Median :183   Median :25.20   summer:90                 
- Mean   :183   Mean   :25.59   fall  :95                 
- 3rd Qu.:274   3rd Qu.:37.00                             
- Max.   :365   Max.   :50.00                             </code></pre>
+ Min.   :  1   Min.   : 2.00   winter:90   Mode:logical  
+ 1st Qu.: 92   1st Qu.:14.00   spring:90   NA's:365      
+ Median :183   Median :25.00   summer:90                 
+ Mean   :183   Mean   :25.74   fall  :95                 
+ 3rd Qu.:274   3rd Qu.:37.80                             
+ Max.   :365   Max.   :49.80                             </code></pre>
 </div>
 </div>
 <section id="why-we-chose-this-distribution" class="level3">
@@ -298,11 +300,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>
      good  moderate unhealthy 
-       79       185       101 </code></pre>
+       80       169       116 </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Longest unhealthy streak:"</span>, max_unhealthy_streak, <span class="st">"days"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Longest unhealthy streak: 3 days</code></pre>
+<pre><code>Longest unhealthy streak: 5 days</code></pre>
 </div>
 </div>
 </section>
@@ -333,7 +335,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>unhealthy_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>winter spring summer   fall 
-    29     22     25     25 </code></pre>
+    34     26     28     28 </code></pre>
 </div>
 </div>
 </section>
@@ -348,10 +350,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>unhealthy_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  season unhealthy_days
-1 winter             29
-2 spring             22
-3 summer             25
-4   fall             25</code></pre>
+1 winter             34
+2 spring             26
+3 summer             28
+4   fall             28</code></pre>
 </div>
 </div>
 </section>

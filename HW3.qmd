@@ -12,28 +12,77 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 ## **Overview**
 
-text
+This assignment simulates one year of PM2.5 air quality monitoring data for an urban monitoring station. The analysis classifies daily pollution risk levels using EPA-inspired thresholds, tracks unhealthy pollution streaks, summarizes seasonal patterns using for loops, and visualizes air quality trends across the year.
 
 ## **Load Packages**
 
 ```{r}
-
+library(tidyverse)
+library(ggplot2)
 ```
 
 ## **Part 1: Build the Dataset**
 
-```{r}
-
-```
-
 ### **Why We Chose This Distribution**
 
-text
+We used sample() to randomly select 365 PM2.5 values from a range of 2 to 50 µg/m³. We chose this range because typical urban PM2.5 levels often fall between about 5 and 25 µg/m³ according to EPA air quality guidance, but concentrations can become much higher during events such as wildfires, traffic congestion, or atmospheric inversions. Using values between 2 and 50 µg/m³ allowed us to generate realistic variation while still producing enough unhealthy days to observe meaningful patterns in the analysis.
 
 ### **Create the Dataset**
 
 ```{r}
+set.seed(262)
 
+# create a sequence of PM2.5 values to sample from
+possible_pm25 <- seq(from = 2, to = 50, by = 0.1)
+
+# sample 365 days worth of readings
+pm25_readings <- sample(possible_pm25, size = 365, replace = TRUE)
+
+# create data frame
+air_quality <- data.frame(
+  day = 1:365,
+  pm25 = pm25_readings
+)
+
+# summary statistics
+summary(air_quality$pm25)
+```
+
+### **Assign Seasons**
+
+```{r}
+# assign season based on day number
+# days 1–90 = winter
+# days 91–180 = spring
+# days 181–270 = summer
+# days 271–365 = fall
+
+air_quality$season <- ifelse(
+  air_quality$day <= 90, "winter",
+  ifelse(
+    air_quality$day <= 180, "spring",
+    ifelse(air_quality$day <= 270, "summer", "fall")
+  )
+)
+
+# convert to factor
+air_quality$season <- factor(
+  air_quality$season,
+  levels = c("winter", "spring", "summer", "fall")
+)
+
+# check results
+summary(air_quality$season)
+```
+
+### **Initialize Risk Column**
+
+```{r}
+# initialize empty risk column
+air_quality$risk <- NA
+
+# preview updated dataset
+summary(air_quality)
 ```
 
 ## **Part 2: Classify Risk with a For Loop**
@@ -47,7 +96,53 @@ text
 ### **Use a For Loop to Fill Risk Column**
 
 ```{r}
+# initialize streak trackers
+current_streak <- 0
+max_unhealthy_streak <- 0
 
+# loop through each day
+for (i in 1:nrow(air_quality)) {
+  
+  # today's PM2.5 value
+  today_pm25 <- air_quality$pm25[i]
+  
+  # classify risk category
+  if (today_pm25 < 12) {
+    air_quality$risk[i] <- "good"
+    
+  } else if (today_pm25 <= 35.4) {
+    air_quality$risk[i] <- "moderate"
+    
+  } else {
+    air_quality$risk[i] <- "unhealthy"
+  }
+  
+  # check unhealthy streak
+   if (air_quality$risk[i] == "unhealthy") {
+    
+    # continue streak if previous day was unhealthy
+    if (i > 1 && air_quality$risk[i - 1] == "unhealthy") {
+      current_streak <- current_streak + 1
+      
+    } else {
+      current_streak <- 1
+    }
+    
+  } else {
+    current_streak <- 0
+  }
+  
+  # update maximum streak if needed
+  if (current_streak > max_unhealthy_streak) {
+    max_unhealthy_streak <- current_streak
+  }
+}
+
+# risk category counts
+table(air_quality$risk)
+
+# print longest streak
+cat("Longest unhealthy streak:", max_unhealthy_streak, "days")
 ```
 
 ## **Part 3: Seasonal Summary with a For Loop**
@@ -55,13 +150,42 @@ text
 ### **Count Unhealthy Days by Season**
 
 ```{r}
+# create vector to store unhealthy counts
+unhealthy_counts <- c(
+  winter = 0,
+  spring = 0,
+  summer = 0,
+  fall = 0
+)
 
+# loop through every day
+for (i in 1:nrow(air_quality)) {
+  
+  # today's season and risk
+  today_season <- air_quality$season[i]
+  today_risk <- air_quality$risk[i]
+  
+  # if unhealthy, add to count
+  if (today_risk == "unhealthy") {
+    unhealthy_counts[today_season] <- unhealthy_counts[today_season] + 1
+  }
+}
+
+# display counts
+unhealthy_counts
 ```
 
 ### **Convert Seasonal Summary to Data Frame**
 
 ```{r}
+# convert counts to data frame
+unhealthy_summary <- data.frame(
+  season = names(unhealthy_counts),
+  unhealthy_days = as.numeric(unhealthy_counts)
+)
 
+# display summary table
+unhealthy_summary
 ```
 
 ## **Part 4: Visualize and Report**
@@ -69,15 +193,43 @@ text
 ### **Plot 1: PM2.5 Across the Year**
 
 ```{r}
+# create title using sprintf
+plot_title <- sprintf(
+  "Daily PM2.5 Concentrations Across the Year - Longest Unhealthy Streak: %d days",
+  max_unhealthy_streak
+)
 
+# create time series plot
+ggplot(air_quality, aes(x = day, y = pm25, color = season)) +
+  geom_line() +
+  labs(
+    title = plot_title,
+    x = "Day of Year",
+    y = expression("PM2.5 (" * mu * "g/m"^3 * ")")
+  ) +
+  theme_minimal()
 ```
 
 ### **Plot 2: Count of Risk Categories**
 
 ```{r}
+# create title using sprintf
+bar_title <- sprintf(
+  "Count of Days by Risk Category - Longest Unhealthy Streak: %d days",
+  max_unhealthy_streak
+)
 
+# create bar chart
+ggplot(air_quality, aes(x = risk, fill = risk)) +
+  geom_bar() +
+  labs(
+    title = bar_title,
+    x = "Risk Category",
+    y = "Number of Days"
+  ) +
+  theme_minimal()
 ```
 
 ## **Management Summary**
 
-text
+This simulated dataset represents one year of PM2.5 air quality readings at an urban monitoring station. Most days fell within the moderate air quality category, while a substantial number of days were classified as unhealthy. The analysis also identified multiple periods of consecutive unhealthy air quality conditions, with the longest streak lasting 3 consecutive days. Seasonal patterns showed that some seasons experienced more unhealthy days than others, which could reflect seasonal wildfire activity, increased transportation emissions, or weather conditions that trap pollutants near the surface. From a public health and management perspective, these findings suggest that continued air quality monitoring is important for identifying periods of elevated risk. Agencies may benefit from implementing public alert systems, especially during seasons with higher pollution levels, and considering policies aimed at reducing emissions from transportation and industrial sources. Continued monitoring and mitigation efforts could help reduce health risks for sensitive populations such as children, older adults, and individuals with respiratory illnesses.

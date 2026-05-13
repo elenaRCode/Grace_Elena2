@@ -195,7 +195,7 @@ unhealthy_summary
 ```{r}
 # create title using sprintf
 plot_title <- sprintf(
-  "Daily PM2.5 Concentrations Across the Year - Longest Unhealthy Streak: %d days",
+  "Daily PM2.5 Levels (Max Unhealthy Streak: %d Days)",
   max_unhealthy_streak
 )
 
@@ -215,7 +215,7 @@ ggplot(air_quality, aes(x = day, y = pm25, color = season)) +
 ```{r}
 # create title using sprintf
 bar_title <- sprintf(
-  "Count of Days by Risk Category - Longest Unhealthy Streak: %d days",
+  "Risk Category Counts (Max Unhealthy Streak: %d Days)",
   max_unhealthy_streak
 )
 

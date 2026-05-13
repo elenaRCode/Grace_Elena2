@@ -2,7 +2,10 @@
 title: "Assignment 3: Air Quality Risk Assessment"
 author: "Grace Bryan & Elena Nirgiotis"
 date: "May 13, 2026"
-format: pdf
+format: 
+  html:
+    theme: cosmo
+    toc: true
 editor: visual
 ---
 
@@ -200,5 +203,4 @@ ggplot(air_quality, aes(x = risk, fill = risk)) +
 
 ## **Management Summary**
 
-This data is a simulation of 365 days of PM2.5 air quality readings over the course of a year. The majority of days fell into the moderate risk category, with a smaller number of good days (around 75). There were around 110 unhealthy days, and the longest consecutive streak of unhealthy days was 5 days in a row. Out of all the seasons, fall had the most unhealthy days (39), which may be due to wildfires that occur that time of year. From a management perspective, launching a public alert system that automatically notifies residents when unhealthy
-conditions are forecast, particularly heading into fall could be useful in ensuring public health. Additionally, we recommend investigating the specific emission sources contributing to the high number of unhealthy days and considering whether stricter local regulations or emission controls are warranted. Lastly, continued monitoring is essential to track whether conditions improve over time.
+This data is a simulation of 365 days of PM2.5 air quality readings over the course of a year. The majority of days fell into the moderate risk category, with a smaller number of good days (around 75). There were around 110 unhealthy days, and the longest consecutive streak of unhealthy days was 5 days in a row. Out of all the seasons, fall had the most unhealthy days (39), which may be due to wildfires that occur that time of year. From a management perspective, launching a public alert system that automatically notifies residents when unhealthy conditions are forecast, particularly heading into fall could be useful in ensuring public health. Additionally, we recommend investigating the specific emission sources contributing to the high number of unhealthy days and considering whether stricter local regulations or emission controls are warranted. Lastly, continued monitoring is essential to track whether conditions improve over time.
